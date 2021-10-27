@@ -75,8 +75,8 @@ public class Bdd {
                         " FROM vehicule" +
                         " INNER JOIN dossier ON vehicule.no_imm = dossier.no_imm" +
                         " WHERE code_categ = ?" +
-                            " AND ((date_retrait <= ? AND date_retour >= ?)" +
-                            " OR (date_retrait <= ? AND date_retour >= ?))");
+                            " AND ((date_retrait >= ? AND date_retrait <= ?)" +
+                            " OR (date_retour >= ? AND date_retour <= ?))");
         stt.setString(1, categorie);
         stt.setString(2, categorie);
         stt.setDate(3, java.sql.Date.valueOf(dateDebut));
