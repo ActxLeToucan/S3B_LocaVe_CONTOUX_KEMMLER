@@ -1,6 +1,4 @@
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 public class Bdd {
     private static Connection connection;
@@ -12,7 +10,9 @@ public class Bdd {
 
         if (connexion(url, user, password)) {
             System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
-            //majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
+            majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
+            System.out.println(calculerMontant("saxo1.1", 8));
+            System.out.println(agencesAvecToutesCateg());
         }
         deconnexion();
     }
@@ -20,8 +20,11 @@ public class Bdd {
     /**
      * se connecte a la base de donnees
      * @param url
+     *          url de la base de donnees
      * @param user
+     *          nom d'utilisateur
      * @param password
+     *          mot de passe
      * @return TRUE si la connexion a pu etre etablie, FALSE sinon
      */
     public static boolean connexion(String url, String user, String password) {
@@ -53,7 +56,8 @@ public class Bdd {
     /**
      * indique si la date est bien au format YYYY-MM-DD
      * @param date
-     * @return
+     *          chaine de caracteres contenant une date
+     * @return true si bon format
      */
     public static boolean estDate(String date) {
         return (date.matches("^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"));
@@ -153,5 +157,53 @@ public class Bdd {
         } else {
             throw new DateInvalidFormatException();
         }
+    }
+
+    /**
+     * donne le montant d'une location
+     * question 3
+     * Calcul du montant d’une location à partir du modèle de véhicule et du
+     * nombre de jours de location.
+     * @param modele
+     *          modele de vehicule demande
+     * @param nbJours
+     *          nombre de jours
+     * @return montant, ou message indiquant pas de tarif
+     * @throws SQLException
+     */
+    public static String calculerMontant(String modele, int nbJours) throws SQLException {
+        PreparedStatement stt = connection.prepareStatement("SELECT DISTINCT tarif.tarif_hebdo, tarif.tarif_jour" +
+                " FROM vehicule" +
+                " INNER JOIN categorie ON categorie.code_categ = vehicule.code_categ" +
+                " INNER JOIN tarif ON tarif.code_tarif = categorie.code_tarif" +
+                " WHERE VEHICULE.MODELE = ?");
+        stt.setString(1, modele);
+        ResultSet resultSet = stt.executeQuery();
+
+        String res;
+        if (resultSet.next()) {
+            double tarifJour = resultSet.getDouble("tarif_jour");
+            double tarifHebdo = resultSet.getDouble("tarif_hebdo");
+            res = nbJours%7 * tarifJour + Math.floor(nbJours/7.) * tarifHebdo + "€";
+        } else {
+            res = "Aucun tarif pour ce modèle.";
+        }
+        return res;
+    }
+
+    /**
+     * donne les agences qui ont toutes les categories de vehicule
+     * question 4
+     * Affichage de la liste des agences (code de l’agence) qui possèdent toutes les
+     * catégories de véhicules.
+     * @return codes des agences
+     * @throws SQLException
+     */
+    public static String agencesAvecToutesCateg() throws SQLException {
+        CallableStatement stt = connection.prepareCall("{? = call f_agenceAvecToutesCateg()}");
+        stt.registerOutParameter(1, Types.VARCHAR);
+
+        stt.execute();
+        return stt.getString(1);
     }
 }
