@@ -116,6 +116,7 @@ public class Bdd {
                 res = "Aucun véhicule disponible.";
             }
 
+            resultSet.close();
             stt.close();
             return res;
         } else {
@@ -188,6 +189,10 @@ public class Bdd {
         } else {
             res = "Aucun tarif pour ce modèle.";
         }
+
+        resultSet.close();
+        stt.close();
+
         return res;
     }
 
@@ -204,6 +209,9 @@ public class Bdd {
         stt.registerOutParameter(1, Types.VARCHAR);
 
         stt.execute();
-        return stt.getString(1);
+        String res = stt.getString(1);
+
+        stt.close();
+        return res;
     }
 }
