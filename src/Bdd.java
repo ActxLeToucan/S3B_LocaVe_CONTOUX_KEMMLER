@@ -1,7 +1,9 @@
 import java.sql.*;
+import java.util.*;
 
 public class Bdd {
     private static Connection connection;
+    private static final Set<String> TRIGGERS = new HashSet<>(Arrays.asList("tr_maj_km_vehicule", "tr_audit"));
 
     public static void main(String[] args) throws SQLException, DateInvalidFormatException {
         String url = "jdbc:oracle:thin:@charlemagne.iutnc.univ-lorraine.fr:1521:infodb";
@@ -9,6 +11,7 @@ public class Bdd {
         String password = args[1];
 
         if (connexion(url, user, password)) {
+            resetTriggers();
             System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
             majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
             System.out.println(calculerMontant("saxo1.1", 8));
@@ -213,5 +216,71 @@ public class Bdd {
 
         stt.close();
         return res;
+    }
+
+    /**
+     * change l'etat d'un trigger existant
+     * @param triggerName
+     *          nom du trigger
+     * @param etat
+     *          état demandé (true = actif, false = désactivé)
+     * @throws SQLException
+     * @throws TriggerInvalidException
+     */
+    public static void setTriggerStatus(String triggerName, boolean etat) throws SQLException, TriggerInvalidException {
+        if (TRIGGERS.contains(triggerName)) {
+            String status;
+            if (etat) status = "ENABLE";
+            else status = "DISABLE";
+            PreparedStatement stt = connection.prepareStatement("ALTER TRIGGER " + triggerName + " " + status);
+            stt.executeUpdate();
+            stt.close();
+        } else {
+            throw new TriggerInvalidException(triggerName);
+        }
+    }
+
+    /**
+     * recupere l'etat d'un trigger
+     * @param triggerName
+     *          nom du trigger
+     * @return 1 si le trigger est actif
+     *          0 si le trigger est desactive
+     *          -1 en cas d'erreur
+     * @throws TriggerInvalidException
+     * @throws SQLException
+     */
+    public static int getTriggerStatus(String triggerName) throws TriggerInvalidException, SQLException {
+        int res = -1;
+        if (TRIGGERS.contains(triggerName)) {
+            PreparedStatement stt = connection.prepareStatement("SELECT STATUS FROM USER_TRIGGERS WHERE TRIGGER_NAME = ?");
+            stt.setString(1, triggerName.toUpperCase());
+            ResultSet resultSet = stt.executeQuery();
+            if (resultSet.next()) {
+                String status = resultSet.getString("STATUS");
+                if (status.compareTo("ENABLED") == 0) res = 1;
+                else if (status.compareTo("DISABLED") == 0) res = 0;
+            }
+            resultSet.close();
+            stt.close();
+        } else {
+            throw new TriggerInvalidException(triggerName);
+        }
+        return res;
+    }
+
+    /**
+     * reinitialise l'etat des triggers a actif
+     * @throws SQLException
+     */
+    public static void resetTriggers() throws SQLException {
+        for (String trigger : TRIGGERS) {
+            try {
+                setTriggerStatus(trigger, true);
+                System.out.println("trigger " + trigger + " : " + getTriggerStatus(trigger));
+            } catch (TriggerInvalidException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
