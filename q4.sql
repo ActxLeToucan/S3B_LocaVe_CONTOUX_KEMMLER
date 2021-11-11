@@ -1,7 +1,7 @@
 --question 4
 CREATE OR REPLACE FUNCTION f_agenceAvecToutesCateg RETURN VARCHAR2
 IS
-    v_agences VARCHAR2(200);
+    v_agences VARCHAR2(1000);
     r_agence agence%ROWTYPE;
     v_nbCateg NUMBER(3,0);
     v_nbCatAgence NUMBER(3,0);
@@ -9,6 +9,7 @@ IS
     CURSOR c_agences IS SELECT * FROM agence;
 BEGIN
     v_agences := 'Les agences suivantes possèdent toutes les catégories de véhicule :';
+    v_i := 0;
     SELECT count(*) INTO v_nbCateg FROM categorie;
     OPEN c_agences;
     LOOP

@@ -11,11 +11,12 @@ public class Bdd {
         String password = args[1];
 
         if (connexion(url, user, password)) {
-            resetTriggers();
-            System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
-            majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
-            System.out.println(calculerMontant("saxo1.1", 8));
+            //resetTriggers();
+            //System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
+            //majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
+            //System.out.println(calculerMontant("saxo1.1", 8));
             System.out.println(agencesAvecToutesCateg());
+            System.out.println(clientsPlusieursModeles());
         }
         deconnexion();
     }
@@ -209,6 +210,25 @@ public class Bdd {
      */
     public static String agencesAvecToutesCateg() throws SQLException {
         CallableStatement stt = connection.prepareCall("{? = call f_agenceAvecToutesCateg()}");
+        stt.registerOutParameter(1, Types.VARCHAR);
+
+        stt.execute();
+        String res = stt.getString(1);
+
+        stt.close();
+        return res;
+    }
+
+    /**
+     * donne les clients qui ont loue au moins deux deux modeles differents
+     * question 5
+     * Affichage de la liste des clients (nom, ville, code postal) qui ont loué deux
+     * modèles différents de voiture (par exemple xsara et twingo).
+     * @return liste des clients
+     * @throws SQLException
+     */
+    public static String clientsPlusieursModeles() throws SQLException {
+        CallableStatement stt = connection.prepareCall("{? = call f_clientPlusieursModeles()}");
         stt.registerOutParameter(1, Types.VARCHAR);
 
         stt.execute();
