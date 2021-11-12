@@ -3,7 +3,9 @@ import java.util.*;
 
 public class Bdd {
     private static Connection connection;
-    private static final Set<String> TRIGGERS = new HashSet<>(Arrays.asList("tr_maj_km_vehicule", "tr_audit"));
+    private static final String TR_MAJKM = "tr_maj_km_vehicule";
+    private static final String TR_AUDIT = "tr_audit";
+    private static final Set<String> TRIGGERS = new HashSet<>(Arrays.asList(TR_MAJKM, TR_AUDIT));
 
     public static void main(String[] args) throws SQLException, DateInvalidFormatException {
         String url = "jdbc:oracle:thin:@charlemagne.iutnc.univ-lorraine.fr:1521:infodb";
@@ -11,12 +13,21 @@ public class Bdd {
         String password = args[1];
 
         if (connexion(url, user, password)) {
-            //resetTriggers();
-            //System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
-            //majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
-            //System.out.println(calculerMontant("saxo1.1", 8));
+            resetTriggers();
+            System.out.println(listeVehicules("c1", "2015-10-07", "2015-10-01"));
+            majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
+            System.out.println(calculerMontant("saxo1.1", 8));
             System.out.println(agencesAvecToutesCateg());
             System.out.println(clientsPlusieursModeles());
+            try {
+                setTriggerStatus(TR_MAJKM, true);
+                System.out.println(getTriggerStatus(TR_MAJKM));
+
+                setTriggerStatus(TR_AUDIT, true);
+                System.out.println(getTriggerStatus(TR_AUDIT));
+            } catch (TriggerInvalidException e) {
+                e.printStackTrace();
+            }
         }
         deconnexion();
     }
