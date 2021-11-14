@@ -33,14 +33,14 @@ public class Bdd {
     }
 
     /**
-     * se connecte a la base de donnees
+     * se connecte à la base de donnees
      * @param url
      *          url de la base de donnees
      * @param user
      *          nom d'utilisateur
      * @param password
      *          mot de passe
-     * @return TRUE si la connexion a pu etre etablie, FALSE sinon
+     * @return TRUE si la connexion a pu être établie, FALSE sinon
      */
     public static boolean connexion(String url, String user, String password) {
         boolean connecte = true;
@@ -54,8 +54,8 @@ public class Bdd {
     }
 
     /**
-     * se deconnecte de la base de donnees
-     * @return TRUE si la deconnexion a reussie, FALSE sinon
+     * se déconnecte de la base de donnees
+     * @return TRUE si la déconnexion a réussie, FALSE sinon
      */
     public static boolean deconnexion() {
         boolean deconnecte = true;
@@ -71,7 +71,7 @@ public class Bdd {
     /**
      * indique si la date est bien au format YYYY-MM-DD
      * @param date
-     *          chaine de caracteres contenant une date
+     *          chaine de caractères contenant une date
      * @return true si bon format
      */
     public static boolean estDate(String date) {
@@ -79,18 +79,18 @@ public class Bdd {
     }
 
     /**
-     * donne la liste des vehicules disponibles
+     * donne la liste des véhicules disponibles
      * question 1
      * Détermination de la liste des véhicules (immatriculation, modèle), d’une
      * catégorie donnée, disponibles pendant une période donnée (date début, date
      * fin).
      * @param categorie
-     *          categorie du vehicule recherche
+     *          catégorie du véhicule recherche
      * @param dateDebut
-     *          date de debut de la periode de recherche
+     *          date de debut de la période de recherche
      * @param dateFin
-     *          date de fin de la periode de recherche
-     * @return resultats, liste des vehicules (immatriculation, modèle)
+     *          date de fin de la période de recherche
+     * @return résultats, liste des véhicules (immatriculation, modèle)
      * @throws SQLException
      * @throws DateInvalidFormatException
      */
@@ -140,18 +140,18 @@ public class Bdd {
     }
 
     /**
-     * met a jour la table calendrier a partir des reservations (table dossier)
-     * pour l'immatriculation donnee, sur la periode donnee
+     * met à jour la table calendrier à partir des reservations (table dossier)
+     * pour l'immatriculation donnee, sur la période donnee
      * question 2
      * Mise à jour du calendrier des réservations pour une période donnée (date de
      * début et de fin d’une demande de location) et un numéro d’immatriculation
      * d’un véhicule.
      * @param dateDebut
-     *          date de debut de la periode de mise a jour
+     *          date de debut de la période de mise à jour
      * @param dateFin
-     *          date de fin de la periode de mise a jour
+     *          date de fin de la période de mise à jour
      * @param immatriculation
-     *          immatriculation du vehicule a mettre a jour
+     *          immatriculation du véhicule à mettre a jour
      * @throws SQLException
      * @throws DateInvalidFormatException
      */
@@ -181,10 +181,10 @@ public class Bdd {
      * Calcul du montant d’une location à partir du modèle de véhicule et du
      * nombre de jours de location.
      * @param modele
-     *          modele de vehicule demande
+     *          modèle de véhicule demande
      * @param nbJours
      *          nombre de jours
-     * @return montant, ou message indiquant pas de tarif
+     * @return montant ou message indiquant pas de tarif
      * @throws SQLException
      */
     public static String calculerMontant(String modele, int nbJours) throws SQLException {
@@ -212,7 +212,7 @@ public class Bdd {
     }
 
     /**
-     * donne les agences qui ont toutes les categories de vehicule
+     * donne les agences qui ont toutes les categories de véhicule
      * question 4
      * Affichage de la liste des agences (code de l’agence) qui possèdent toutes les
      * catégories de véhicules.
@@ -231,7 +231,7 @@ public class Bdd {
     }
 
     /**
-     * donne les clients qui ont loue au moins deux deux modeles differents
+     * donne les clients qui ont loué au moins deux modèles différents
      * question 5
      * Affichage de la liste des clients (nom, ville, code postal) qui ont loué deux
      * modèles différents de voiture (par exemple xsara et twingo).
@@ -250,7 +250,7 @@ public class Bdd {
     }
 
     /**
-     * change l'etat d'un trigger existant
+     * change l'état d'un trigger existant
      * @param triggerName
      *          nom du trigger
      * @param etat
@@ -272,11 +272,11 @@ public class Bdd {
     }
 
     /**
-     * recupere l'etat d'un trigger
+     * récupère l'état d'un trigger
      * @param triggerName
      *          nom du trigger
      * @return 1 si le trigger est actif
-     *          0 si le trigger est desactive
+     *          0 si le trigger est désactivé
      *          -1 en cas d'erreur
      * @throws TriggerInvalidException
      * @throws SQLException
@@ -301,7 +301,7 @@ public class Bdd {
     }
 
     /**
-     * reinitialise l'etat des triggers a actif
+     * reinitialise l'état des triggers a actif
      * @throws SQLException
      */
     public static void resetTriggers() throws SQLException {
