@@ -1,7 +1,12 @@
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Date;
 
 public class Bdd {
 
@@ -35,11 +40,17 @@ public class Bdd {
         ControleurConnexion controleurConnexion = new ControleurConnexion(modele, champsConnexion);
         JButton buttonConnexion = new JButton("Se connecter");
         buttonConnexion.addActionListener(controleurConnexion);
-
+/*
+        JDateChooser jDateChooser = new JDateChooser(new Date());
+        Date date = jDateChooser.getDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(simpleDateFormat.format(date));
+*/
         JFrame frame = new JFrame("LocaVe");
         frame.add(buttonConnexion, BorderLayout.NORTH);
         frame.add(vueResultat, BorderLayout.SOUTH);
         frame.add(champsConnexion, BorderLayout.CENTER);
+//        frame.add(jDateChooser, BorderLayout.WEST);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
