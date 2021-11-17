@@ -22,10 +22,12 @@ BEGIN
     SELECT marque INTO v_marque FROM vehicule WHERE no_imm = :new.no_imm;
     SELECT modele INTO v_modele FROM vehicule WHERE no_imm = :new.no_imm;
 
-    INSERT INTO tableAudit VALUES (:new.no_dossier,v_date,v_nom,v_marque,v_modele);
+    IF :new.date_retour - :new.date_retrait > 7 THEN
+            INSERT INTO tableAudit VALUES (:new.no_dossier,v_date,v_nom,v_marque,v_modele);
+    END IF;
 END;
 
 -- test du trigger
-insert into DOSSIER values (20, to_date('25-12-2020', 'DD-MM-YYYY'), to_date('31-12-2020', 'DD-MM-YYYY'),null, null, null, 't1', 'x', null, null, null, 'roule001', '1234ya54', 'Nancy', 'Nancy', 'Nancy');
+insert into DOSSIER values (21, to_date('20-12-2020', 'DD-MM-YYYY'), to_date('31-12-2020', 'DD-MM-YYYY'),null, null, null, 't1', 'x', null, null, null, 'roule001', '1234ya54', 'Nancy', 'Nancy', 'Nancy');
 select * from tableAudit;
 select * from DOSSIER;
