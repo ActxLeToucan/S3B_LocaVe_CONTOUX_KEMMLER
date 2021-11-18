@@ -33,9 +33,11 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
     public ControleurQuestion1(Modele modele) {
         this.modele = modele;
 
+        JPanel panelMain = new JPanel();
+
         JButton reloadList = new JButton("Rafraichir liste");
-        JButton executer = new JButton("Executer");
-        comboBox = new JComboBox();
+        JButton executer = new JButton("Exécuter");
+        comboBox = new JComboBox<>();
 
         dateChooserDebut = new JDateChooser(new Date());
         dateChooserDebut.setPreferredSize(new Dimension(120, 20));
@@ -61,16 +63,18 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
         panelDateChooserFin.add(labelDateChooserFin);
         panelDateChooserFin.add(dateChooserFin);
 
-        this.setLayout(new GridLayout(4,0));
-        this.add(panelComboBox);
-        this.add(panelDateChooserDebut);
-        this.add(panelDateChooserFin);
-        this.add(executer);
+        panelMain.setLayout(new GridLayout(4,0));
+        panelMain.add(panelComboBox);
+        panelMain.add(panelDateChooserDebut);
+        panelMain.add(panelDateChooserFin);
+        panelMain.add(executer);
+
+        this.add(panelMain);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareTo("Executer") == 0) {
+        if (e.getActionCommand().compareTo("Exécuter") == 0) {
             comboBox.getSelectedItem();
             String categ = String.valueOf(comboBox.getSelectedItem());
 
@@ -87,7 +91,10 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
                 this.modele.setResultats(ex.toString());
             } catch (DateInvalidFormatException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Format de date invalide.\n" + ex.toString());
+                this.modele.setResultats("Format de date invalide.\n" + ex);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                this.modele.setResultats("Erreur durant l'exécution.\n" + ex);
             }
             this.modele.notifierObservateurs();
         } else if (e.getActionCommand().compareTo("Rafraichir liste") == 0) {
@@ -98,7 +105,7 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
                 }
             } catch (SQLException | NullPointerException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Impossible de mettre à jour la liste des catégories. Vérifiez que vous êtes connecté.\n" + ex.toString());
+                this.modele.setResultats("Impossible de mettre à jour la liste des catégories. Vérifiez que vous êtes connecté.\n" + ex);
                 this.modele.notifierObservateurs();
             }
         }
