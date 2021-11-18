@@ -4,34 +4,96 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * permet de controler la connexion et la deconexion a la bdd
+ * organise et controle les differents champs necessaires a la connexion
  */
-public class ControleurConnexion implements ActionListener {
+public class ControleurConnexion extends JPanel implements ActionListener {
     /**
-     * modele a controler
+     * champs du nom d'utilisateur
+     */
+    private JTextField user;
+    /**
+     * champ de l'url
+     */
+    private JTextField url;
+    /**
+     * champ du mot de passe
+     */
+    private JPasswordField password;
+    /**
+     * modele a controlerr
      */
     private Modele modele;
-    /**
-     * champs de connexion
-     */
-    private ChampsConnexion champsConnexion;
 
     /**
-     * constrcution du controleur
+     * construction du controleur
      * @param modele
-     *          modele a controlerr
-     * @param champsConnexion
-     *          champs de connexion
+     *          modele a controler
      */
-    public ControleurConnexion(Modele modele, ChampsConnexion champsConnexion) {
+    public ControleurConnexion(Modele modele) {
         this.modele = modele;
-        this.champsConnexion = champsConnexion;
+
+
+        JLabel labelUser = new JLabel("Nom d'utilisateur");
+        user = new JTextField("", 15);
+
+        JLabel labelPassword = new JLabel("Mot de passe");
+        password = new JPasswordField("", 15);
+
+        JLabel labelUrl = new JLabel("URL de la base de données");
+        url = new JTextField("jdbc:oracle:thin:@charlemagne.iutnc.univ-lorraine.fr:1521:infodb", 50);
+
+
+        JPanel panelUser = new JPanel();
+        panelUser.add(labelUser);
+        panelUser.add(user);
+
+        JPanel panelPassword = new JPanel();
+        panelPassword.add(labelPassword);
+        panelPassword.add(password);
+
+        JPanel panelUrl = new JPanel();
+        panelUrl.add(labelUrl);
+        panelUrl.add(url);
+
+        JButton buttonConnexion = new JButton("Se connecter");
+        buttonConnexion.addActionListener(this);
+
+
+        this.setLayout(new BorderLayout());
+        this.add(panelUser, BorderLayout.WEST);
+        this.add(panelPassword, BorderLayout.CENTER);
+        this.add(buttonConnexion, BorderLayout.NORTH);
+        this.add(panelUrl, BorderLayout.EAST);
+    }
+
+    /**
+     * donne le nom d'utilisateur rentre dans le champ correspondant
+     * @return nom d'utilisateur
+     */
+    public String getUser() {
+        return this.user.getText();
+    }
+
+    /**
+     * donne le mot de passe rentre dans le champ correspondant
+     * @return mot de passe
+     */
+    public String getPassword() {
+        return new String(this.password.getPassword());
+    }
+
+    /**
+     * donne l'url rentree dans le champ correspondant
+     * @return url
+     */
+    public String getUrl() {
+        return this.url.getText();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().compareTo("Se connecter") == 0) {
-            if (this.modele.connexion(this.champsConnexion.getUrl(), this.champsConnexion.getUser(), this.champsConnexion.getPassword())) {
+            if (this.modele.connexion(getUrl(), getUser(), getPassword())) {
                 ((JButton)e.getSource()).setBackground(Color.GREEN);
                 ((JButton)e.getSource()).setText("Se déconnecter");
             } else {

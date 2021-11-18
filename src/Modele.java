@@ -325,6 +325,26 @@ public class Modele implements Sujet {
     }
 
     /**
+     * recupere la liste des categories de vehicules
+     * @return categories
+     * @throws SQLException
+     */
+    public List<String> getCategories() throws SQLException {
+        PreparedStatement stt = connection.prepareStatement("SELECT code_categ FROM categorie");
+        ResultSet resultSet = stt.executeQuery();
+
+        List<String> listeCategories = new ArrayList<>();
+        while (resultSet.next()) {
+            listeCategories.add(resultSet.getString(1));
+        }
+
+        resultSet.close();
+        stt.close();
+
+        return listeCategories;
+    }
+
+    /**
      * donne les resultats de la derniere execution
      * @return resultats
      */
