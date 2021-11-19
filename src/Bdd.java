@@ -36,9 +36,13 @@ public class Bdd {
 
         ControleurConnexion controleurConnexion = new ControleurConnexion(modele);
         ControleurQuestion1 controleurQuestion1 = new ControleurQuestion1(modele);
+        ControleurQuestion2 controleurQuestion2 = new ControleurQuestion2(modele);
+        ControleurQuestion3 controleurQuestion3 = new ControleurQuestion3(modele);
 
         JTabbedPane onglets = new JTabbedPane();
         onglets.add("Question 1", controleurQuestion1);
+        onglets.add("Question 2", controleurQuestion2);
+        onglets.add("Question 3", controleurQuestion3);
 
         JFrame frame = new JFrame("LocaVe");
         frame.setLayout(new BorderLayout());

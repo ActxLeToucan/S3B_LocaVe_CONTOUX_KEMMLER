@@ -9,11 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * controleur pour la question 1
+ * controleur pour la question 2
  */
-public class ControleurQuestion1 extends JPanel implements ActionListener {
+public class ControleurQuestion2 extends JPanel implements ActionListener {
     /**
-     * menu deroulant contenant les categories de vehicules
+     * menu deroulant contenant les immatriculations des vehicules
      */
     private JComboBox<String> comboBox;
     /**
@@ -25,12 +25,7 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
      */
     private Modele modele;
 
-    /**
-     * constrcution du controleur
-     * @param modele
-     *          modele a controler
-     */
-    public ControleurQuestion1(Modele modele) {
+    public ControleurQuestion2(Modele modele) {
         this.modele = modele;
 
         JPanel panelMain = new JPanel();
@@ -48,7 +43,7 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
         executer.addActionListener(this);
 
         JPanel panelComboBox = new JPanel();
-        JLabel labelComboBox = new JLabel("Catégorie");
+        JLabel labelComboBox = new JLabel("Immatriculation");
         panelComboBox.add(labelComboBox);
         panelComboBox.add(comboBox);
         panelComboBox.add(reloadList);
@@ -75,7 +70,7 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().compareTo("Exécuter") == 0) {
-            String categ = String.valueOf(comboBox.getSelectedItem());
+            String immatriculation = String.valueOf(comboBox.getSelectedItem());
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date dateD = dateChooserDebut.getDate();
@@ -84,7 +79,8 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
             String dateDebut = simpleDateFormat.format(dateD);
             String dateFin = simpleDateFormat.format(dateF);
             try {
-                this.modele.setResultats(this.modele.listeVehicules(categ, dateDebut, dateFin));
+                this.modele.majCalendrierReserv(dateDebut, dateFin, immatriculation);
+                this.modele.setResultats("Mise à jour effectuée.");
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 this.modele.setResultats(ex.toString());
@@ -99,12 +95,12 @@ public class ControleurQuestion1 extends JPanel implements ActionListener {
         } else if (e.getActionCommand().compareTo("Rafraichir liste") == 0) {
             this.comboBox.removeAllItems();
             try {
-                for (String categ : this.modele.getCategories()) {
-                    this.comboBox.addItem(categ);
+                for (String immat : this.modele.getImmatriculations()) {
+                    this.comboBox.addItem(immat);
                 }
             } catch (SQLException | NullPointerException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Impossible de mettre à jour la liste des catégories. Vérifiez que vous êtes connecté.\n" + ex);
+                this.modele.setResultats("Impossible de mettre à jour la liste des immatriculations. Vérifiez que vous êtes connecté.\n" + ex);
                 this.modele.notifierObservateurs();
             }
         }

@@ -333,15 +333,55 @@ public class Modele implements Sujet {
         PreparedStatement stt = connection.prepareStatement("SELECT code_categ FROM categorie");
         ResultSet resultSet = stt.executeQuery();
 
-        List<String> listeCategories = new ArrayList<>();
+        List<String> liste = new ArrayList<>();
         while (resultSet.next()) {
-            listeCategories.add(resultSet.getString(1));
+            liste.add(resultSet.getString(1));
         }
 
         resultSet.close();
         stt.close();
 
-        return listeCategories;
+        return liste;
+    }
+
+    /**
+     * recupere la liste des immatriculations
+     * @return immatriculations
+     * @throws SQLException
+     */
+    public List<String> getImmatriculations() throws SQLException {
+        PreparedStatement stt = connection.prepareStatement("SELECT no_imm FROM vehicule");
+        ResultSet resultSet = stt.executeQuery();
+
+        List<String> liste = new ArrayList<>();
+        while (resultSet.next()) {
+            liste.add(resultSet.getString(1));
+        }
+
+        resultSet.close();
+        stt.close();
+
+        return liste;
+    }
+
+    /**
+     * recupere la liste des modeles de vehicules
+     * @return modeles
+     * @throws SQLException
+     */
+    public List<String> getModeles() throws SQLException {
+        PreparedStatement stt = connection.prepareStatement("SELECT DISTINCT modele FROM vehicule");
+        ResultSet resultSet = stt.executeQuery();
+
+        List<String> liste = new ArrayList<>();
+        while (resultSet.next()) {
+            liste.add(resultSet.getString(1));
+        }
+
+        resultSet.close();
+        stt.close();
+
+        return liste;
     }
 
     /**

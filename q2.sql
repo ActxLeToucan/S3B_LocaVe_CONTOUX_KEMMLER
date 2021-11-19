@@ -4,6 +4,7 @@ IS
     v_dateactu DATE;
     v_dispo BOOLEAN;
     v_ancienneVal calendrier.paslibre%TYPE;
+    v_vehicExisteCalendrier NUMBER(4,0);
     r_reservation dossier%ROWTYPE;
     CURSOR c_reservations (p_immatriculation VARCHAR2) IS SELECT * FROM dossier WHERE no_imm=p_immatriculation;
 BEGIN
@@ -21,16 +22,19 @@ BEGIN
         END LOOP;
         CLOSE c_reservations;
 
-        SELECT paslibre into v_ancienneVal FROM calendrier WHERE NO_IMM = p_immatriculation AND DATEJOUR = v_dateactu;
-        IF (v_dispo) THEN
-            UPDATE calendrier SET paslibre = null WHERE datejour = v_dateactu;
-            IF (v_ancienneVal IS NOT NULL) THEN
-                DBMS_OUTPUT.PUT_LINE('modifié de x à null !');
-            END IF;
-        ELSE
-            UPDATE calendrier SET paslibre = 'x' WHERE datejour = v_dateactu;
-            IF (v_ancienneVal IS NULL) THEN
-                DBMS_OUTPUT.PUT_LINE('modifié de null à x !');
+        SELECT count(*) INTO v_vehicExisteCalendrier FROM calendrier WHERE no_imm = p_immatriculation AND datejour = v_dateactu;
+        IF v_vehicExisteCalendrier > 0 THEN
+            SELECT paslibre into v_ancienneVal FROM calendrier WHERE no_imm = p_immatriculation AND datejour = v_dateactu;
+            IF (v_dispo) THEN
+                UPDATE calendrier SET paslibre = null WHERE datejour = v_dateactu;
+                IF (v_ancienneVal IS NOT NULL) THEN
+                    DBMS_OUTPUT.PUT_LINE('modifié de x à null !');
+                END IF;
+            ELSE
+                UPDATE calendrier SET paslibre = 'x' WHERE datejour = v_dateactu;
+                IF (v_ancienneVal IS NULL) THEN
+                    DBMS_OUTPUT.PUT_LINE('modifié de null à x !');
+                END IF;
             END IF;
         END IF;
         v_dateactu := v_dateactu + 1;
