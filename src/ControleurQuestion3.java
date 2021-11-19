@@ -1,5 +1,3 @@
-import com.toedter.calendar.JDateChooser;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,6 +21,11 @@ public class ControleurQuestion3 extends JPanel implements ActionListener {
      */
     private Modele modele;
 
+    /**
+     * constrcution du controleur
+     * @param modele
+     *          modele a controler
+     */
     public ControleurQuestion3(Modele modele) {
         this.modele = modele;
 
@@ -49,7 +52,7 @@ public class ControleurQuestion3 extends JPanel implements ActionListener {
         panelSpinner.add(spinner);
         panelSpinner.add(labelSpinner);
 
-        panelMain.setLayout(new GridLayout(4,0));
+        panelMain.setLayout(new GridLayout(3,0));
         panelMain.add(panelComboBox);
         panelMain.add(panelSpinner);
         panelMain.add(executer);

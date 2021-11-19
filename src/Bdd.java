@@ -38,11 +38,15 @@ public class Bdd {
         ControleurQuestion1 controleurQuestion1 = new ControleurQuestion1(modele);
         ControleurQuestion2 controleurQuestion2 = new ControleurQuestion2(modele);
         ControleurQuestion3 controleurQuestion3 = new ControleurQuestion3(modele);
+        ControleurQuestion4 controleurQuestion4 = new ControleurQuestion4(modele);
+        ControleurQuestion5 controleurQuestion5 = new ControleurQuestion5(modele);
 
         JTabbedPane onglets = new JTabbedPane();
-        onglets.add("Question 1", controleurQuestion1);
-        onglets.add("Question 2", controleurQuestion2);
-        onglets.add("Question 3", controleurQuestion3);
+        onglets.add("Q1 : Vérifier disponibilité", controleurQuestion1);
+        onglets.add("Q2 : MAJ calendrier", controleurQuestion2);
+        onglets.add("Q3 : Calculer montant", controleurQuestion3);
+        onglets.add("Q4 : Agences avec toutes les categ", controleurQuestion4);
+        onglets.add("Q5 : Clients avec plusieurs modèles", controleurQuestion5);
 
         JFrame frame = new JFrame("LocaVe");
         frame.setLayout(new BorderLayout());

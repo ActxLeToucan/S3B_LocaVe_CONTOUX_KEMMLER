@@ -25,6 +25,11 @@ public class ControleurQuestion2 extends JPanel implements ActionListener {
      */
     private Modele modele;
 
+    /**
+     * constrcution du controleur
+     * @param modele
+     *          modele a controler
+     */
     public ControleurQuestion2(Modele modele) {
         this.modele = modele;
 
