@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * vue permettant d'afficher les resultats

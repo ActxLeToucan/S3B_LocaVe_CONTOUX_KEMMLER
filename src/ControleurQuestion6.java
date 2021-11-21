@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -51,7 +50,28 @@ public class ControleurQuestion6 extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (Modele.TRIGGERS.contains(e.getActionCommand())) {
-            //TODO
+            JCheckBox checkBox = (JCheckBox)e.getSource();
+            if (checkBox.isSelected()) {
+                try {
+                    this.modele.setTriggerStatus(e.getActionCommand(), true);
+                } catch (NullPointerException | TriggerInvalidException | SQLException ex) {
+                    ex.printStackTrace();
+                    this.modele.addResultat("Impossible de changer l'état du trigger " + checkBox.getText() + ".\n" + ex);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    this.modele.addResultat("Erreur durant la mise à jour du trigger.\n" + ex);
+                }
+            } else {
+                try {
+                    this.modele.setTriggerStatus(e.getActionCommand(), false);
+                } catch (NullPointerException | TriggerInvalidException | SQLException ex) {
+                    ex.printStackTrace();
+                    this.modele.addResultat("Impossible de changer l'état du trigger " + checkBox.getText() + ".\n" + ex);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    this.modele.addResultat("Erreur durant la mise à jour du trigger.\n" + ex);
+                }
+            }
 
             this.modele.notifierObservateurs();
 
