@@ -16,7 +16,7 @@ public class Modele implements Sujet {
     /**
      * ensemble des triggers
      */
-    private static final Set<String> TRIGGERS = new HashSet<>(Arrays.asList(TR_MAJKM, TR_AUDIT));
+    public static final Set<String> TRIGGERS = new HashSet<>(Arrays.asList(TR_MAJKM, TR_AUDIT));
 
     /**
      * liste des observateurs
@@ -100,8 +100,8 @@ public class Modele implements Sujet {
      * @param dateFin
      *          date de fin de la période de recherche
      * @return résultats, liste des véhicules (immatriculation, modèle)
-     * @throws SQLException
-     * @throws DateInvalidFormatException
+     * @throws SQLException erreur sql
+     * @throws DateInvalidFormatException mauvais format de date
      */
     public String listeVehicules(String categorie, String dateDebut, String dateFin) throws SQLException, DateInvalidFormatException {
         if (estDate(dateDebut) && estDate(dateFin)) {
@@ -161,8 +161,8 @@ public class Modele implements Sujet {
      *          date de fin de la période de mise à jour
      * @param immatriculation
      *          immatriculation du véhicule à mettre a jour
-     * @throws SQLException
-     * @throws DateInvalidFormatException
+     * @throws SQLException erreur sql
+     * @throws DateInvalidFormatException mauvais format de date
      */
     public void majCalendrierReserv(String dateDebut, String dateFin, String immatriculation) throws SQLException, DateInvalidFormatException {
         if (estDate(dateDebut) && estDate(dateFin)) {
@@ -194,7 +194,7 @@ public class Modele implements Sujet {
      * @param nbJours
      *          nombre de jours
      * @return montant ou message indiquant pas de tarif
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public String calculerMontant(String modele, int nbJours) throws SQLException {
         PreparedStatement stt = connection.prepareStatement("SELECT DISTINCT tarif.tarif_hebdo, tarif.tarif_jour" +
@@ -226,7 +226,7 @@ public class Modele implements Sujet {
      * Affichage de la liste des agences (code de l’agence) qui possèdent toutes les
      * catégories de véhicules.
      * @return codes des agences
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public String agencesAvecToutesCateg() throws SQLException {
         CallableStatement stt = connection.prepareCall("{? = call f_agenceAvecToutesCateg()}");
@@ -245,7 +245,7 @@ public class Modele implements Sujet {
      * Affichage de la liste des clients (nom, ville, code postal) qui ont loué deux
      * modèles différents de voiture (par exemple xsara et twingo).
      * @return liste des clients
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public String clientsPlusieursModeles() throws SQLException {
         CallableStatement stt = connection.prepareCall("{? = call f_clientPlusieursModeles()}");
@@ -264,8 +264,8 @@ public class Modele implements Sujet {
      *          nom du trigger
      * @param etat
      *          état demandé (true = actif, false = désactivé)
-     * @throws SQLException
-     * @throws TriggerInvalidException
+     * @throws SQLException erreur sql
+     * @throws TriggerInvalidException aucun trigger de ce nom n'existe
      */
     public void setTriggerStatus(String triggerName, boolean etat) throws SQLException, TriggerInvalidException {
         if (TRIGGERS.contains(triggerName)) {
@@ -287,10 +287,10 @@ public class Modele implements Sujet {
      * @return 1 si le trigger est actif
      *          0 si le trigger est désactivé
      *          -1 en cas d'erreur
-     * @throws TriggerInvalidException
-     * @throws SQLException
+     * @throws SQLException erreur sql
+     * @throws TriggerInvalidException aucun trigger de ce nom n'existe
      */
-    public int getTriggerStatus(String triggerName) throws TriggerInvalidException, SQLException {
+    public int getTriggerStatus(String triggerName) throws SQLException, TriggerInvalidException {
         int res = -1;
         if (TRIGGERS.contains(triggerName)) {
             PreparedStatement stt = connection.prepareStatement("SELECT STATUS FROM USER_TRIGGERS WHERE TRIGGER_NAME = ?");
@@ -311,7 +311,7 @@ public class Modele implements Sujet {
 
     /**
      * reinitialise l'état des triggers a actif
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public void resetTriggers() throws SQLException {
         for (String trigger : TRIGGERS) {
@@ -327,7 +327,7 @@ public class Modele implements Sujet {
     /**
      * recupere la liste des categories de vehicules
      * @return categories
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public List<String> getCategories() throws SQLException {
         PreparedStatement stt = connection.prepareStatement("SELECT code_categ FROM categorie");
@@ -347,7 +347,7 @@ public class Modele implements Sujet {
     /**
      * recupere la liste des immatriculations
      * @return immatriculations
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public List<String> getImmatriculations() throws SQLException {
         PreparedStatement stt = connection.prepareStatement("SELECT no_imm FROM vehicule");
@@ -367,7 +367,7 @@ public class Modele implements Sujet {
     /**
      * recupere la liste des modeles de vehicules
      * @return modeles
-     * @throws SQLException
+     * @throws SQLException erreur sql
      */
     public List<String> getModeles() throws SQLException {
         PreparedStatement stt = connection.prepareStatement("SELECT DISTINCT modele FROM vehicule");
@@ -399,6 +399,15 @@ public class Modele implements Sujet {
      */
     public void setResultats(String resultats) {
         this.resultats = resultats;
+    }
+
+    /**
+     * ajoute un nouveau resultat
+     * @param resultat
+     *          nouveau resultat
+     */
+    public void addResultat(String resultat) {
+        this.resultats = this.resultats + '\n' + resultat;
     }
 
     @Override

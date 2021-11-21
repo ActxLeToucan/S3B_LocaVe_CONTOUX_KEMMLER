@@ -70,7 +70,7 @@ public class ControleurConnexion extends JPanel implements ActionListener {
      * donne le nom d'utilisateur rentre dans le champ correspondant
      * @return nom d'utilisateur
      */
-    public String getUser() {
+    private String getUser() {
         return this.user.getText();
     }
 
@@ -78,7 +78,7 @@ public class ControleurConnexion extends JPanel implements ActionListener {
      * donne le mot de passe rentre dans le champ correspondant
      * @return mot de passe
      */
-    public String getPassword() {
+    private String getPassword() {
         return new String(this.password.getPassword());
     }
 
@@ -86,7 +86,7 @@ public class ControleurConnexion extends JPanel implements ActionListener {
      * donne l'url rentree dans le champ correspondant
      * @return url
      */
-    public String getUrl() {
+    private String getUrl() {
         return this.url.getText();
     }
 

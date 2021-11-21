@@ -10,9 +10,7 @@ public class VueResultat extends JTextArea implements Observateur {
      */
     public VueResultat() {
         super("résultats...");
-        this.setPreferredSize(new Dimension(500, 200));
         this.setEditable(false);
-
     }
 
     @Override

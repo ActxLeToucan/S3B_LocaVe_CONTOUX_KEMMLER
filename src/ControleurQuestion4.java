@@ -14,7 +14,7 @@ public class ControleurQuestion4 extends JPanel implements ActionListener {
     private Modele modele;
 
     /**
-     * constrcution du controleur
+     * construction du controleur
      * @param modele
      *          modele a controler
      */
@@ -40,12 +40,14 @@ public class ControleurQuestion4 extends JPanel implements ActionListener {
                 this.modele.setResultats(this.modele.agencesAvecToutesCateg());
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats(ex.toString());
+                this.modele.addResultat(ex.toString());
             } catch (Exception ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Erreur durant l'exécution.\n" + ex);
+                this.modele.addResultat("Erreur durant l'exécution.\n" + ex);
             }
+
             this.modele.notifierObservateurs();
+
         }
     }
 }

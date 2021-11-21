@@ -1,35 +1,14 @@
-import com.toedter.calendar.JDateChooser;
-
 import javax.swing.*;
 import java.awt.*;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Bdd {
 
-    public static void main(String[] args) throws SQLException, DateInvalidFormatException {
+    public static void main(String[] args) {
         Modele modele = new Modele();
-/*
-        if (modele.connexion(url, user, password)) {
-            resetTriggers();
-            System.out.println(modele.listeVehicules("c1", "2015-10-07", "2015-10-01"));
-            majCalendrierReserv("2015-10-01", "2015-10-07", "1234ya54");
-            System.out.println(calculerMontant("saxo1.1", 8));
-            System.out.println(agencesAvecToutesCateg());
-            System.out.println(clientsPlusieursModeles());
-            try {
-                setTriggerStatus(TR_MAJKM, true);
-                System.out.println(getTriggerStatus(TR_MAJKM));
 
-                setTriggerStatus(TR_AUDIT, true);
-                System.out.println(getTriggerStatus(TR_AUDIT));
-            } catch (TriggerInvalidException e) {
-                e.printStackTrace();
-            }
-        }
-*/
         VueResultat vueResultat = new VueResultat();
+        JScrollPane scrollPane = new JScrollPane (vueResultat, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(new Dimension(450, 200));
         modele.enregistrerObservateur(vueResultat);
 
         modele.notifierObservateurs();
@@ -40,6 +19,8 @@ public class Bdd {
         ControleurQuestion3 controleurQuestion3 = new ControleurQuestion3(modele);
         ControleurQuestion4 controleurQuestion4 = new ControleurQuestion4(modele);
         ControleurQuestion5 controleurQuestion5 = new ControleurQuestion5(modele);
+        ControleurQuestion6 controleurQuestion6 = new ControleurQuestion6(modele);
+        ControleurResultat controleurResultat = new ControleurResultat(modele);
 
         JTabbedPane onglets = new JTabbedPane();
         onglets.add("Q1 : Vérifier disponibilité", controleurQuestion1);
@@ -47,10 +28,15 @@ public class Bdd {
         onglets.add("Q3 : Calculer montant", controleurQuestion3);
         onglets.add("Q4 : Agences avec toutes les categ", controleurQuestion4);
         onglets.add("Q5 : Clients avec plusieurs modèles", controleurQuestion5);
+        onglets.add("Q6 : Triggers", controleurQuestion6);
+
+        JPanel resultat = new JPanel(new BorderLayout());
+        resultat.add(scrollPane, BorderLayout.CENTER);
+        resultat.add(controleurResultat, BorderLayout.EAST);
 
         JFrame frame = new JFrame("LocaVe");
         frame.setLayout(new BorderLayout());
-        frame.add(vueResultat, BorderLayout.SOUTH);
+        frame.add(resultat, BorderLayout.SOUTH);
         frame.add(controleurConnexion, BorderLayout.NORTH);
         frame.add(onglets, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -26,7 +26,7 @@ public class ControleurQuestion2 extends JPanel implements ActionListener {
     private Modele modele;
 
     /**
-     * constrcution du controleur
+     * construction du controleur
      * @param modele
      *          modele a controler
      */
@@ -88,15 +88,17 @@ public class ControleurQuestion2 extends JPanel implements ActionListener {
                 this.modele.setResultats("Mise à jour effectuée.");
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats(ex.toString());
+                this.modele.addResultat(ex.toString());
             } catch (DateInvalidFormatException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Format de date invalide.\n" + ex);
+                this.modele.addResultat("Format de date invalide.\n" + ex);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Erreur durant l'exécution.\n" + ex);
+                this.modele.addResultat("Erreur durant l'exécution.\n" + ex);
             }
+
             this.modele.notifierObservateurs();
+
         } else if (e.getActionCommand().compareTo("Rafraichir liste") == 0) {
             this.comboBox.removeAllItems();
             try {
@@ -105,9 +107,14 @@ public class ControleurQuestion2 extends JPanel implements ActionListener {
                 }
             } catch (SQLException | NullPointerException ex) {
                 ex.printStackTrace();
-                this.modele.setResultats("Impossible de mettre à jour la liste des immatriculations. Vérifiez que vous êtes connecté.\n" + ex);
-                this.modele.notifierObservateurs();
+                this.modele.addResultat("Impossible de mettre à jour la liste des immatriculations. Vérifiez que vous êtes connecté.\n" + ex);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                this.modele.addResultat("Erreur durant la mise à jour.\n" + ex);
             }
+
+            this.modele.notifierObservateurs();
+
         }
     }
 }
